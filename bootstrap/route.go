@@ -26,7 +26,7 @@ func registerGlobalMiddleWare(router *gin.Engine) {
 	router.Use(
 		// logger middleware for logging http request logger
 		middlewares.Logger(),
-		gin.Recovery())
+		middlewares.Recovery())
 }
 
 func setup404Handler(router *gin.Engine) {

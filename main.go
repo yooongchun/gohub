@@ -3,12 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gohub/app/http/middlewares"
 	"gohub/bootstrap"
 	btsConfig "gohub/config"
-	"gohub/pkg/auth"
 	"gohub/pkg/config"
-	"gohub/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,11 +37,6 @@ func main() {
 	bootstrap.SetupRedis()
 	// 初始化路由
 	bootstrap.SetupRoute(router)
-
-	router.GET("/test_auth", middlewares.AuthJWT(), func(c *gin.Context) {
-		userModel := auth.CurrentUser(c)
-		response.Data(c, userModel)
-	})
 
 	err := router.Run(":" + config.Get("app.port"))
 	if err != nil {

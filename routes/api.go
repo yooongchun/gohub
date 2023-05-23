@@ -58,6 +58,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			{
 				usersGroup.GET("", uc.Index)
 			}
+			tpc := new(controllers.TopicsController)
+			tpcGroup := v1.Group("/topics")
+			{
+				tpcGroup.POST("", middlewares.AuthJWT(), tpc.Store)
+			}
 		}
 	}
 }

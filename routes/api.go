@@ -63,6 +63,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			{
 				tpcGroup.POST("", middlewares.AuthJWT(), tpc.Store)
 			}
+			cgc := new(controllers.CategoriesController)
+			cgcGroup := v1.Group("/categories")
+			{
+				cgcGroup.POST("", middlewares.AuthJWT(), cgc.Store)
+			}
 		}
 	}
 }

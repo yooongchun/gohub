@@ -3,15 +3,13 @@ package cmd
 import (
 	"context"
 	"github.com/gogf/gf/v2/encoding/gbase64"
-	"github.com/gogf/gf/v2/net/goai"
-	"github.com/gogf/gf/v2/os/glog"
-	"gohub/internal/consts"
-
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/net/goai"
 	"github.com/gogf/gf/v2/os/gcmd"
-
-	"gohub/internal/controller/hello"
+	"github.com/gogf/gf/v2/os/glog"
+	"gohub/internal/consts"
+	"gohub/internal/router"
 )
 
 var (
@@ -24,10 +22,7 @@ var (
 			g.Log().Info(ctx, gbase64.MustDecodeString(consts.Logo), "version", consts.Version)
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(ghttp.MiddlewareHandlerResponse)
-				group.Bind(
-					hello.NewV1(),
-				)
+				router.R.BindController(ctx, group)
 			})
 			enhanceOpenApiDoc(s)
 			s.Run()

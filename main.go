@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "gohub/internal/packed"
-
 	"github.com/gogf/gf/v2/os/gctx"
+	_ "gohub/internal/app/boot"
+	_ "gohub/internal/packed"
 
 	"gohub/internal/cmd"
 )

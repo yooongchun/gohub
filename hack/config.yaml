@@ -6,3 +6,11 @@ gfcli:
     build: "-a amd64 -s linux -p temp -ew"
     tagPrefixes:
       - my.image.pub/my-app
+  gen:
+    dao:
+      - link: "mysql:gohub:121561zycZYC@tcp(127.0.0.1:3306)/gohub"
+        tables: "sys_user,sys_login_log,sys_operate_log"
+        removePrefix: "gh_"
+        descriptionTag: true
+        noModelComment: true
+        path: "./internal/app/system"

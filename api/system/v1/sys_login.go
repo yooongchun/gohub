@@ -13,6 +13,7 @@ type UserLoginReq struct {
 	VerifyCode string `p:"verifyCode" v:"required#验证码不能为空"`
 	VerifyKey  string `p:"verifyKey"`
 }
+
 type UserLoginRes struct {
 	g.Meta   `mime:"application/json"`
 	UserInfo *model.LoginUserRes `json:"userInfo"`

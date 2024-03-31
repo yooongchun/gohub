@@ -3,9 +3,9 @@ package router
 import (
 	"context"
 	"github.com/gogf/gf/v2/net/ghttp"
-	commonRouter "gohub/internal/app/common/router"
-	commonService "gohub/internal/app/common/service"
-	systemRouter "gohub/internal/app/system/router"
+	commonRouter "gohub/internal/router/common"
+	systemRouter "gohub/internal/router/system"
+	commonService "gohub/internal/service"
 )
 
 var R = new(Router)

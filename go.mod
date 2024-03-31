@@ -7,6 +7,7 @@ require (
 	github.com/gogf/gf/contrib/nosql/redis/v2 v2.6.4
 	github.com/gogf/gf/v2 v2.6.4
 	github.com/mojocn/base64Captcha v1.3.6
+	github.com/mssola/user_agent v0.6.0
 	github.com/tiger1103/gfast-token v1.0.6
 )
 

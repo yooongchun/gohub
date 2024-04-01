@@ -48,3 +48,13 @@ func GetCityByIp(ip string) string {
 		return ""
 	}
 }
+
+// GetConfig 获取配置
+func GetConfig(ctx context.Context, paramName string) string {
+	return g.Cfg().MustGet(ctx, paramName).String()
+}
+
+// GetConfigInt 获取配置
+func GetConfigInt(ctx context.Context, paramName string) int {
+	return g.Cfg().MustGet(ctx, paramName).Int()
+}

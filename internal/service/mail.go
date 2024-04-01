@@ -7,12 +7,11 @@ package service
 
 import (
 	"context"
-	"gohub/internal/model"
 )
 
 type (
 	IMail interface {
-		Send(ctx context.Context, email model.Email) bool
+		Send(ctx context.Context, to, subject, html string) (err error)
 	}
 )
 

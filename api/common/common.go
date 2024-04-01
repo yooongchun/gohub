@@ -11,5 +11,7 @@ import (
 )
 
 type ICommonV1 interface {
-	GetCaptchaOne(ctx context.Context, req *v1.GetCaptchaOneReq) (res *v1.GetCaptchaOneRes, err error)
+	GetVerifyCodeByCaptcha(ctx context.Context, req *v1.GetVerifyCodeByCaptchaReq) (res *v1.GetVerifyCodeByCaptchaRes, err error)
+	GetVerifyCodeByEmail(ctx context.Context, req *v1.GetVerifyCodeByEmailReq) (res *v1.GetVerifyCodeByEmailRes, err error)
+	GetVerifyCodeByPhone(ctx context.Context, req *v1.GetVerifyCodeByPhoneReq) (res *v1.GetVerifyCodeByPhoneRes, err error)
 }

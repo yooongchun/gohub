@@ -11,7 +11,7 @@ import (
 
 type (
 	IAliyunSms interface {
-		Send(ctx context.Context, mobile string, data map[string]string) (err error)
+		Send(ctx context.Context, mobile string, verifyCode string) (err error)
 	}
 )
 

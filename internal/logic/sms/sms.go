@@ -16,7 +16,7 @@ func init() {
 	service.RegisterAliyunSms(New())
 }
 
-func (s *sAliyunSms) Send(ctx context.Context, mobile string, data map[string]string) (err error) {
+func (s *sAliyunSms) Send(ctx context.Context, mobile string, verifyCode string) (err error) {
 	var client *dysmsapi.Client
 	client, err = dysmsapi.NewClient(&openapi.Config{
 		AccessKeyId:     tea.String(utils.GetConfig(ctx, "sms.aliyun.accessKeyId")),
@@ -27,7 +27,7 @@ func (s *sAliyunSms) Send(ctx context.Context, mobile string, data map[string]st
 	}
 	// 发送短信
 	var templateParam []byte
-	templateParam, err = json.Marshal(data)
+	templateParam, err = json.Marshal(map[string]string{"code": verifyCode})
 	if err != nil {
 		g.Log().Errorf(ctx, "序列化短信模板参数失败: %s\n", err.Error())
 		return
@@ -49,6 +49,7 @@ func (s *sAliyunSms) Send(ctx context.Context, mobile string, data map[string]st
 		err = gerror.New("响应错误")
 		return
 	}
+
 	return
 }
 

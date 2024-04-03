@@ -18,6 +18,7 @@ type (
 	ISysUser interface {
 		NotCheckAuthAdminIds(ctx context.Context) *gset.Set
 		GetAdminUserByUsernamePassword(ctx context.Context, req *v1.UserLoginReq) (user *model.LoginUserRes, err error)
+		GetAdminUserByMobile(ctx context.Context, mobile string) (user *model.LoginUserRes, err error)
 		// GetUserByUsername 通过用户名获取用户信息
 		GetUserByUsername(ctx context.Context, userName string) (user *model.LoginUserRes, err error)
 		// GetUserById 通过用户名获取用户信息
@@ -31,6 +32,8 @@ type (
 		Update(ctx context.Context, req *v1.UpdateUserReq, id int64) (err error)
 		// UserNameOrMobileExists 用户名或手机号是否存在，如果传入id则需排除该id
 		UserNameOrMobileExists(ctx context.Context, userName, mobile string, id ...int64) error
+		// UserExists 用户是否存在，根据用户名，手机号，email三者其一判断
+		UserExists(ctx context.Context, userName, mobile, email string) (err error)
 		// GetUserInfo 获取编辑用户信息
 		GetUserInfo(ctx context.Context, id uint64) (res *v1.GetUserOneRes, err error)
 		// GetUserInfoById 通过Id获取用户信息

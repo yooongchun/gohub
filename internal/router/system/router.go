@@ -13,7 +13,7 @@ var R Router
 type Router struct{}
 
 func (r *Router) BindController(ctx context.Context, group *ghttp.RouterGroup) {
-	group.Group("/system", func(group *ghttp.RouterGroup) {
+	group.Group("/sys", func(group *ghttp.RouterGroup) {
 		group.Bind(system.NewV1()) // Login
 		// 登录验证拦截
 		_ = service2.GhToken().Middleware(group)

@@ -58,6 +58,19 @@ func (s *sSysUser) GetAdminUserByUsernamePassword(ctx context.Context, req *v1.U
 	return
 }
 
+func (s *sSysUser) GetAdminUserByMobile(ctx context.Context, mobile string) (user *model.LoginUserRes, err error) {
+	user = &model.LoginUserRes{}
+	err = g.Try(ctx, func(ctx context.Context) {
+		err = dao.SysUser.Ctx(ctx).Fields(user).Where(dao.SysUser.Columns().Mobile, mobile).Scan(user)
+		errUtils.ErrIfNotNil(ctx, err)
+		//账号状态
+		if user.UserStatus == 0 {
+			errUtils.ErrIfNotNil(ctx, gerror.New("账号已被冻结"))
+		}
+	})
+	return
+}
+
 // GetUserByUsername 通过用户名获取用户信息
 func (s *sSysUser) GetUserByUsername(ctx context.Context, userName string) (user *model.LoginUserRes, err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
@@ -213,6 +226,37 @@ func (s *sSysUser) UserNameOrMobileExists(ctx context.Context, userName, mobile 
 		}
 	})
 	return err
+}
+
+// UserExists 用户是否存在，根据用户名，手机号，email三者其一判断
+func (s *sSysUser) UserExists(ctx context.Context, userName, mobile, email string) (err error) {
+	user := (*entity.SysUser)(nil)
+	err = g.Try(ctx, func(ctx context.Context) {
+		m := dao.SysUser.Ctx(ctx)
+		m = m.Where(fmt.Sprintf("%s='%s' OR %s='%s' OR %s='%s'",
+			dao.SysUser.Columns().UserName,
+			userName,
+			dao.SysUser.Columns().Mobile,
+			mobile,
+			dao.SysUser.Columns().UserEmail,
+			email))
+		err = m.Limit(1).Scan(&user)
+		errUtils.ErrIfNotNil(ctx, err, "获取用户信息失败")
+		if user == nil {
+			return
+		}
+		if user.UserName == userName {
+			err = gerror.New("用户名已存在")
+			return
+		} else if user.Mobile == mobile {
+			err = gerror.New("手机号已存在")
+			return
+		} else {
+			err = gerror.New("邮箱已存在")
+			return
+		}
+	})
+	return
 }
 
 // GetUserInfo 获取编辑用户信息

@@ -26,14 +26,14 @@ func (c *ControllerV1) GetVerifyCodeByPhone(ctx context.Context, req *v1.GetVeri
 	//生成验证码
 	verifyCode := grand.Digits(6)
 	// 发送短信
-	err = service.AliyunSms().Send(ctx, req.Phone, verifyCode)
+	err = service.AliyunSms().Send(ctx, req.Mobile, verifyCode)
 	if err != nil {
 		g.Log().Errorf(ctx, "发送短信失败: %s\n", err.Error())
 		err = gerror.New("服务器内部错误")
 		return
 	}
 	// 发送成功，验证码保存到redis中
-	err = g.Redis().SetEX(ctx, fmt.Sprintf("%s%s", cacheKeyPrefix, req.Phone), verifyCode, expiredTime)
+	err = g.Redis().SetEX(ctx, fmt.Sprintf("%s%s", cacheKeyPrefix, req.Mobile), verifyCode, expiredTime)
 	if err != nil {
 		g.Log().Errorf(ctx, "设置验证码缓存失败: %s\n", err.Error())
 		err = gerror.New("服务器内部错误")

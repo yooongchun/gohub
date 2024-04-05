@@ -34,18 +34,6 @@ type CreateUserBaseReq struct {
 	Status   uint   `p:"status"`
 }
 
-// CreateUserReq 创建用户请求参数
-type CreateUserReq struct {
-	g.Meta `path:"/user" tags:"用户管理" method:"post" summary:"添加用户"`
-	*CreateUserBaseReq
-	UserName string `p:"userName" v:"required#用户账号不能为空"`
-	Password string `p:"password" v:"required|password#密码不能为空|密码以字母开头，只能包含字母、数字和下划线，长度在6~18之间"`
-	UserSalt string
-}
-
-type CreateUserRes struct {
-}
-
 // UpdateUserReq 修改用户请求参数
 type UpdateUserReq struct {
 	g.Meta `path:"/user/:id" tags:"用户管理" method:"put" summary:"修改用户"`

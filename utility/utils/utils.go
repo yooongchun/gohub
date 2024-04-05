@@ -58,3 +58,8 @@ func GetConfig(ctx context.Context, paramName string) string {
 func GetConfigInt(ctx context.Context, paramName string) int {
 	return g.Cfg().MustGet(ctx, paramName).Int()
 }
+
+// GetConfigBool 获取配置
+func GetConfigBool(ctx context.Context, paramName string) bool {
+	return g.Cfg().MustGet(ctx, paramName).Bool()
+}

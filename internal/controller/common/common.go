@@ -3,3 +3,40 @@
 // =================================================================================
 
 package common
+
+import (
+	"fmt"
+	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/util/grand"
+	"gohub/internal/consts"
+	"gohub/internal/service"
+	"gohub/utility/errUtils"
+	"gohub/utility/utils"
+	"time"
+)
+
+// 统一读取配置项
+var (
+	ctx            = gctx.New()
+	cacheKeyPrefix = utils.GetConfig(ctx, "verifyCode.cacheKeyPrefix")
+	expiredTime    = int64(utils.GetConfigInt(ctx, "verifyCode.expiredTime")) // seconds
+	tmplFilePath   = "resource/template/email.html"
+)
+
+// 生成验证码
+func genVerifyCode() string {
+	return grand.Digits(6)
+}
+
+// 验证码保存到redis中
+func cacheVerifyCode(key, verifyCode string) {
+	cacheKey := fmt.Sprintf("%s%s", cacheKeyPrefix, key)
+	err := service.Cache().GetCache().Set(ctx, cacheKey, verifyCode, time.Duration(expiredTime)*time.Second)
+	errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
+}
+
+// 判断验证码是否正确
+func verifyCaptcha(verifyKey, verifyCode string) {
+	err := service.Captcha().VerifyCaptcha(verifyKey, verifyCode)
+	errUtils.ErrIfNotNil(ctx, err)
+}

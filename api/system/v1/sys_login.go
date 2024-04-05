@@ -3,7 +3,7 @@ package v1
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"gohub/api/common/v1"
-	"gohub/internal/model"
+	"gohub/internal/model/entity"
 )
 
 type UserLoginReq struct {
@@ -14,21 +14,35 @@ type UserLoginReq struct {
 	VerifyKey  string `p:"verifyKey"`
 }
 
-type UserLoginRes struct {
+type LoginResCommon struct {
 	g.Meta   `mime:"application/json"`
-	UserInfo *model.LoginUserRes `json:"userInfo"`
-	Token    string              `json:"token"`
+	UserInfo *entity.SysUser `json:"userInfo"`
+	Token    string          `json:"token"`
 }
+type UserLoginRes struct {
+	*LoginResCommon
+}
+
 type PhoneLoginReq struct {
 	g.Meta     `path:"/login/phone" tags:"手机验证码登陆" method:"post" summary:"用户登陆"`
-	Mobile     string `p:"phone" v:"required#手机号不能为空"`
-	VerifyCode string `p:"verifyCode" v:"required|size:6#手机验证码不能为空|手机验证码长度为6位"`
+	Mobile     string `p:"phone" v:"required|phone#手机号不能为空|手机号不正确"`
+	VerifyCode string `p:"verifyCode" v:"required|size:6#验证码不能为空|验证码长度为6位"`
 }
+
 type PhoneLoginRes struct {
-	g.Meta   `mime:"application/json"`
-	UserInfo *model.LoginUserRes `json:"userInfo"`
-	Token    string              `json:"token"`
+	*LoginResCommon
 }
+
+type EmailLoginReq struct {
+	g.Meta     `path:"/login/email" tags:"邮箱验证码登陆" method:"post" summary:"用户登陆"`
+	Email      string `p:"email" v:"required|email#邮箱不能为空|邮箱号无效"`
+	VerifyCode string `p:"verifyCode" v:"required|size:6#验证码不能为空|验证码长度为6位"`
+}
+
+type EmailLoginRes struct {
+	*LoginResCommon
+}
+
 type UserLogoutReq struct {
 	g.Meta `path:"/logout" tags:"登出" method:"post" summary:"用户登出"`
 	v1.Author
@@ -45,6 +59,7 @@ type UserRegisterUsingPhoneReq struct {
 	VerifyCode string `p:"verifyCode" v:"required|size:6|integer#验证码不能为空|验证码长度为6位|验证码格式不正确"`
 	Mobile     string `p:"phone" v:"required|phone#手机号不能为空|手机号格式不正确"`
 }
+
 type UserRegisterUsingEmailReq struct {
 	g.Meta     `path:"/register/email" tags:"邮箱号注册" method:"post" summary:"用户注册"`
 	Username   string `p:"username" v:"required|max-length:20#用户名不能为空|用户名长度不能超过20个字符"`
@@ -56,6 +71,7 @@ type UserRegisterUsingEmailReq struct {
 type UserRegisterUsingPhoneRes struct {
 	g.Meta `mime:"application/json"`
 }
+
 type UserRegisterUsingEmailRes struct {
 	g.Meta `mime:"application/json"`
 }

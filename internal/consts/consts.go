@@ -7,3 +7,7 @@ const (
 const (
 	PageSize = 10 //分页长度
 )
+
+const (
+	InternalServerError = "服务器内部错误"
+)

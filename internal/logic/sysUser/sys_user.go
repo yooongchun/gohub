@@ -58,10 +58,19 @@ func (s *sSysUser) GetAdminUserByUsernamePassword(ctx context.Context, req *v1.U
 	return
 }
 
-func (s *sSysUser) GetAdminUserByMobile(ctx context.Context, mobile string) (user *model.LoginUserRes, err error) {
-	user = &model.LoginUserRes{}
+// GetAdminUserByUniqueKey 手机号，邮箱，用户名三者其一
+func (s *sSysUser) GetAdminUserByUniqueKey(ctx context.Context, key string) (user *entity.SysUser, err error) {
+	user = &entity.SysUser{}
 	err = g.Try(ctx, func(ctx context.Context) {
-		err = dao.SysUser.Ctx(ctx).Fields(user).Where(dao.SysUser.Columns().Mobile, mobile).Scan(user)
+		err = dao.SysUser.Ctx(ctx).
+			FieldsEx(dao.SysUser.Columns().UserPassword, dao.SysUser.Columns().UserSalt).
+			Where(fmt.Sprintf("%s='%s' OR %s='%s' OR %s='%s'",
+				dao.SysUser.Columns().UserName,
+				key,
+				dao.SysUser.Columns().Mobile,
+				key,
+				dao.SysUser.Columns().UserEmail,
+				key)).Scan(user)
 		errUtils.ErrIfNotNil(ctx, err)
 		//账号状态
 		if user.UserStatus == 0 {
@@ -229,32 +238,31 @@ func (s *sSysUser) UserNameOrMobileExists(ctx context.Context, userName, mobile 
 }
 
 // UserExists 用户是否存在，根据用户名，手机号，email三者其一判断
-func (s *sSysUser) UserExists(ctx context.Context, userName, mobile, email string) (err error) {
+func (s *sSysUser) UserExists(ctx context.Context, key string) (err error) {
 	user := (*entity.SysUser)(nil)
 	err = g.Try(ctx, func(ctx context.Context) {
 		m := dao.SysUser.Ctx(ctx)
 		m = m.Where(fmt.Sprintf("%s='%s' OR %s='%s' OR %s='%s'",
 			dao.SysUser.Columns().UserName,
-			userName,
+			key,
 			dao.SysUser.Columns().Mobile,
-			mobile,
+			key,
 			dao.SysUser.Columns().UserEmail,
-			email))
+			key))
 		err = m.Limit(1).Scan(&user)
 		errUtils.ErrIfNotNil(ctx, err, "获取用户信息失败")
 		if user == nil {
 			return
 		}
-		if user.UserName == userName {
+		switch key {
+		case user.UserName:
 			err = gerror.New("用户名已存在")
-			return
-		} else if user.Mobile == mobile {
+		case user.Mobile:
 			err = gerror.New("手机号已存在")
-			return
-		} else {
+		case user.UserEmail:
 			err = gerror.New("邮箱已存在")
-			return
 		}
+		return
 	})
 	return
 }

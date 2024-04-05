@@ -2,6 +2,7 @@ package captcha
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/mojocn/base64Captcha"
 	"gohub/internal/service"
@@ -40,7 +41,10 @@ func (s *sCaptcha) GetVerifyImgString(ctx context.Context) (idKeyC string, base6
 }
 
 // VerifyCaptcha 验证验证码
-func (s *sCaptcha) VerifyCaptcha(idKey string, verifyValue string) bool {
+func (s *sCaptcha) VerifyCaptcha(idKey string, verifyValue string) (err error) {
 	c := base64Captcha.NewCaptcha(s.driver, s.store)
-	return c.Verify(idKey, gstr.ToLower(verifyValue), true)
+	if ok := c.Verify(idKey, gstr.ToLower(verifyValue), true); !ok {
+		err = gerror.New("验证码不正确")
+	}
+	return
 }

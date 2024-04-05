@@ -5,6 +5,7 @@
 package logic
 
 import (
+	_ "gohub/internal/logic/cache"
 	_ "gohub/internal/logic/captcha"
 	_ "gohub/internal/logic/context"
 	_ "gohub/internal/logic/mail"

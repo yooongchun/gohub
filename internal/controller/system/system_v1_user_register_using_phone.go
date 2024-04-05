@@ -21,7 +21,7 @@ func (c *ControllerV1) UserRegisterUsingPhone(ctx context.Context, req *v1.UserR
 		return
 	}
 	// 注册用户
-	err = service.SysUser().UserExists(ctx, req.Username, "", req.Mobile)
+	err = service.SysUser().UserExists(ctx, req.Mobile)
 	if err != nil {
 		return
 	}
@@ -37,7 +37,7 @@ func (c *ControllerV1) UserRegisterUsingPhone(ctx context.Context, req *v1.UserR
 				Mobile:       req.Mobile,
 				IsAdmin:      0,
 			})
-			errUtils.ErrIfNotNil(ctx, e, "添加用户失败")
+			errUtils.ErrIfNotNil(ctx, e, "注册失败，系统异常")
 		})
 		return err
 	})

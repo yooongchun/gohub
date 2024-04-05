@@ -14,7 +14,7 @@ type (
 		// GetVerifyImgString 生成验证码图片
 		GetVerifyImgString(ctx context.Context) (idKeyC string, base64StringC string, err error)
 		// VerifyCaptcha 验证验证码
-		VerifyCaptcha(idKey string, verifyValue string) bool
+		VerifyCaptcha(idKey string, verifyValue string) (err error)
 	}
 )
 

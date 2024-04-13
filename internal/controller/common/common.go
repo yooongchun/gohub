@@ -38,5 +38,6 @@ func cacheVerifyCode(key, verifyCode string) {
 // 判断验证码是否正确
 func verifyCaptcha(verifyKey, verifyCode string) {
 	err := service.Captcha().VerifyCaptcha(verifyKey, verifyCode)
+
 	errUtils.ErrIfNotNil(ctx, err)
 }

@@ -56,4 +56,5 @@ func (s *sContext) GetUserId(ctx context.Context) uint64 {
 		return user.Id
 	}
 	return 0
+
 }

@@ -10,5 +10,5 @@ type GetVerifyCodeByPhoneReq struct {
 }
 
 type GetVerifyCodeByPhoneRes struct {
-	g.Meta `mime:"application/json"`
+	EmptyRes
 }

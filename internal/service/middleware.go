@@ -14,8 +14,12 @@ type (
 		MiddlewareCORS(r *ghttp.Request)
 		// Ctx 自定义上下文对象
 		Ctx(r *ghttp.Request)
-		// Auth 权限判断处理中间件
-		Auth(r *ghttp.Request)
+		// AdminRequired 权限判断处理中间件
+		AdminRequired(r *ghttp.Request)
+		// LoginRequired 登录判断处理中间件
+		LoginRequired(r *ghttp.Request)
+		// ErrorHandler 错误处理中间件
+		ErrorHandler(r *ghttp.Request)
 	}
 )
 

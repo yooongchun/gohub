@@ -2,6 +2,7 @@ package mail
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/os/gctx"
 	"gohub/internal/service"
 	"gohub/utility/utils"
 	"gopkg.in/gomail.v2"
@@ -11,14 +12,18 @@ func init() {
 	service.RegisterMail(New())
 }
 
+var (
+	ctx    = gctx.New()
+	sender = utils.GetConfig(ctx, "mail.qq.sender")
+	host   = utils.GetConfig(ctx, "mail.qq.host")
+	token  = utils.GetConfig(ctx, "mail.qq.token")
+	port   = utils.GetConfigInt(ctx, "mail.qq.port")
+)
+
 type sMail struct {
 }
 
 func (s *sMail) Send(ctx context.Context, to, subject, html string) (err error) {
-	sender := utils.GetConfig(ctx, "mail.qq.sender")
-	host := utils.GetConfig(ctx, "mail.qq.host")
-	token := utils.GetConfig(ctx, "mail.qq.token")
-	port := utils.GetConfigInt(ctx, "mail.qq.port")
 
 	m := gomail.NewMessage()
 	//发送人

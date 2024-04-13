@@ -3,9 +3,10 @@ package router
 import (
 	"context"
 	"github.com/gogf/gf/v2/net/ghttp"
-	commonRouter "gohub/internal/router/common"
-	systemRouter "gohub/internal/router/system"
-	commonService "gohub/internal/service"
+	"gohub/internal/router/admin"
+	"gohub/internal/router/common"
+	"gohub/internal/router/user"
+	"gohub/internal/service"
 )
 
 var R = new(Router)
@@ -14,12 +15,18 @@ type Router struct{}
 
 func (r *Router) BindController(ctx context.Context, group *ghttp.RouterGroup) {
 	group.Group("/api/v1", func(group *ghttp.RouterGroup) {
-		// 跨域处理
-		group.Middleware(commonService.Middleware().MiddlewareCORS)
+		//跨域处理
+		group.Middleware(service.Middleware().MiddlewareCORS)
 		group.Middleware(ghttp.MiddlewareHandlerResponse)
-		// 绑定后台理由
-		systemRouter.R.BindController(ctx, group)
+		// 错误处理中间件
+		group.Middleware(service.Middleware().ErrorHandler)
 		//绑定公共路由
-		commonRouter.R.BindController(ctx, group)
+		common.R.BindController(ctx, group)
+		//绑定后台理由
+		admin.R.BindController(ctx, group)
+		//绑定用户路由
+		user.R.BindController(ctx, group)
+		// 后台操作日志记录
+		group.Hook("/*", ghttp.HookAfterOutput, service.OperateLog().OperationLog)
 	})
 }

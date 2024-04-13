@@ -44,6 +44,7 @@ func (s *sCaptcha) GetVerifyImgString(ctx context.Context) (idKeyC string, base6
 func (s *sCaptcha) VerifyCaptcha(idKey string, verifyValue string) (err error) {
 	c := base64Captcha.NewCaptcha(s.driver, s.store)
 	if ok := c.Verify(idKey, gstr.ToLower(verifyValue), true); !ok {
+
 		err = gerror.New("验证码不正确")
 	}
 	return

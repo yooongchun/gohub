@@ -1,12 +1,17 @@
 package middleware
 
 import (
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/util/gconv"
+	"gohub/internal/consts"
 	"gohub/internal/model"
 	"gohub/internal/service"
 	"gohub/utility/responseUtils"
+	"net/http"
+	"strings"
 )
 
 func init() {
@@ -51,24 +56,46 @@ func (s *sMiddleware) Ctx(r *ghttp.Request) {
 	r.Middleware.Next()
 }
 
-// Auth 权限判断处理中间件
-func (s *sMiddleware) Auth(r *ghttp.Request) {
+// AdminRequired 权限判断处理中间件
+func (s *sMiddleware) AdminRequired(r *ghttp.Request) {
 	ctx := r.GetCtx()
 	//获取登陆用户id
-	adminId := service.Context().GetUserId(ctx)
-	//获取无需验证权限的用户id
-	tagSuperAdmin := false
-	service.SysUser().NotCheckAuthAdminIds(ctx).Iterator(func(v interface{}) bool {
-		if gconv.Uint64(v) == adminId {
-			tagSuperAdmin = true
-			return false
-		}
-		return true
-	})
-	if tagSuperAdmin {
-		r.Middleware.Next()
-		//不要再往后面执行
-		return
+	ctxUser := service.Context().Get(ctx)
+	if ctxUser.User.IsAdmin != 1 {
+		responseUtils.FailJson(true, r, "您无权访问！")
 	}
-	responseUtils.FailJson(true, r, "无权访问")
+	r.Middleware.Next()
+}
+
+// LoginRequired 登录判断处理中间件
+func (s *sMiddleware) LoginRequired(r *ghttp.Request) {
+	ctx := r.GetCtx()
+	//获取登陆用户id
+	ctxUser := service.Context().Get(ctx)
+	if ctxUser.User == nil {
+		responseUtils.FailJson(true, r, "请先登录！")
+	}
+	r.Middleware.Next()
+}
+
+type APIResponse struct {
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+// ErrorHandler 错误处理中间件
+func (s *sMiddleware) ErrorHandler(r *ghttp.Request) {
+	r.Middleware.Next()
+	if err := r.GetError(); err != nil {
+		r.Response.ClearBuffer()
+		if strings.Contains(err.Error(), consts.InternalServerError) {
+			r.Response.WriteStatus(gcode.New(http.StatusInternalServerError, consts.InternalServerError, nil).Code())
+		} else {
+			r.Response.WriteStatus(gcode.CodeOK.Code())
+		}
+		r.Response.WriteJson(APIResponse{Code: gerror.Code(err).Code(),
+			Message: err.Error(),
+			Data:    nil})
+	}
 }

@@ -9,7 +9,7 @@ import (
 
 func (c *ControllerV1) PhoneLogin(ctx context.Context, req *v1.PhoneLoginReq) (res *v1.PhoneLoginRes, err error) {
 	var resBase *v1.LoginResCommon
-	err, resBase = LoginCommon(ctx, req.Mobile, req.VerifyCode, "mobile")
+	err, resBase = LoginCommon(ctx, req.Mobile, "", req.VerifyCode, "mobile")
 	if err != nil {
 		return
 	}

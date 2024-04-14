@@ -47,7 +47,7 @@ func (s *sSysUser) GetUserByUniqueKey(ctx context.Context, key string) (user *en
 			FieldsEx(dao.SysUser.Columns().UserPassword, dao.SysUser.Columns().UserSalt).
 			Where(dao.SysUser.Columns().UserName, key).
 			WhereOr(dao.SysUser.Columns().Mobile, key).
-			WhereOr(dao.SysUser.Columns().UserEmail).Scan(&user)
+			WhereOr(dao.SysUser.Columns().UserEmail, key).Scan(&user)
 		errUtils.ErrIfNotNil(ctx, err)
 		//账号状态
 		if user != nil && user.UserStatus == 0 {

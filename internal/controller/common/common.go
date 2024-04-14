@@ -14,6 +14,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/gogf/gf/v2/util/gmode"
 	"github.com/gogf/gf/v2/util/grand"
 	v1 "gohub/api/common/v1"
 	"gohub/internal/consts"
@@ -74,22 +75,30 @@ func checkVerifyCode(ctx context.Context, key, code string) (err error) {
 }
 
 // LoginCommon 统一登陆操作
-func LoginCommon(ctx context.Context, key, verifyCode, loginType string) (err error, loginRes *v1.LoginResCommon) {
+func LoginCommon(ctx context.Context, key, verifyKey, verifyCode, loginType string) (err error, loginRes *v1.LoginResCommon) {
 	var (
 		user  *entity.SysUser
 		token string
 	)
 	//判断验证码是否正确
-	err = checkVerifyCode(ctx, key, verifyCode)
-	if err != nil {
-		return
+	if gmode.IsDevelop() {
+		// 开发环境不需要验证码
+	} else if loginType == "user" {
+		// 账号密码登陆使用图形验证码
+		verifyCaptcha(verifyKey, verifyCode)
+	} else {
+		// 否则使用邮箱/手机验证码
+		err = checkVerifyCode(ctx, key, verifyCode)
+		if err != nil {
+			return
+		}
 	}
 	ip := utils.GetClientIp(ctx)
 	userAgent := utils.GetUserAgent(ctx)
 	user, err = service.SysUser().GetUserByUniqueKey(ctx, key)
 	if err != nil {
 		// 保存登录失败的日志信息
-		service.SysLoginLog().Invoke(gctx.New(), key, loginType, err.Error(), 1)
+		service.SysLoginLog().Invoke(ctx, key, loginType, err.Error(), 1)
 		return
 	}
 	err = service.SysUser().UpdateLoginInfo(ctx, user.Id, ip)
@@ -97,7 +106,7 @@ func LoginCommon(ctx context.Context, key, verifyCode, loginType string) (err er
 		return
 	}
 	// 保存登录成功的日志信息
-	service.SysLoginLog().Invoke(gctx.New(), key, loginType, "登陆成功", 0)
+	service.SysLoginLog().Invoke(context.WithoutCancel(ctx), key, loginType, "登陆成功", 0)
 	tokenKey := gconv.String(user.Id) + "-" + gmd5.MustEncryptString(user.UserName) + gmd5.MustEncryptString(user.UserPassword)
 	if multiLogin {
 		tokenKey = gconv.String(user.Id) + "-" + gmd5.MustEncryptString(user.UserName) + gmd5.MustEncryptString(user.UserPassword+ip+userAgent)

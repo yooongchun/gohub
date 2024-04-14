@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/grand"
 	"gohub/internal/consts"
@@ -13,25 +14,30 @@ import (
 	"gohub/utility/errUtils"
 	"gohub/utility/utils"
 
-	"github.com/gogf/gf/v2/errors/gerror"
-
 	"gohub/api/common/v1"
 )
 
 func (c *ControllerV1) UserRegisterUsingEmail(ctx context.Context, req *v1.UserRegisterUsingEmailReq) (res *v1.UserRegisterUsingEmailRes, err error) {
+	// 判断用户是否已存在
+	var user = &entity.SysUser{}
+	user, err = service.SysUser().GetUserByUniqueKey(ctx, req.Email)
+	errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
+	if user != nil {
+		err = gerror.New("邮箱号已存在")
+		return
+	}
+	user, err = service.SysUser().GetUserByUniqueKey(ctx, req.Username)
+	errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
+	if user != nil {
+		err = gerror.New("账号已存在")
+		return
+	}
 	// 判断验证码是否正确
 	err = checkVerifyCode(ctx, req.Email, req.VerifyCode)
 	if err != nil {
 		return
 	}
 	// 注册用户
-	var user = &entity.SysUser{}
-	user, err = service.SysUser().GetUserByUniqueKey(ctx, req.Email)
-	errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
-	if user != nil {
-		err = gerror.New("用户已存在")
-		return
-	}
 	salt := grand.S(10)
 	req.Password = utils.EncryptPassword(req.Password, salt)
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {

@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/grand"
 	"gohub/internal/consts"
@@ -13,23 +14,28 @@ import (
 	"gohub/utility/errUtils"
 	"gohub/utility/utils"
 
-	"github.com/gogf/gf/v2/errors/gerror"
-
 	"gohub/api/common/v1"
 )
 
 func (c *ControllerV1) UserRegisterUsingPhone(ctx context.Context, req *v1.UserRegisterUsingPhoneReq) (res *v1.UserRegisterUsingPhoneRes, err error) {
-	// 判断验证码是否正确
-	err = checkVerifyCode(ctx, req.Mobile, req.VerifyCode)
-	if err != nil {
-		return
-	}
 	// 判断用户是否已存在
 	var user = &entity.SysUser{}
 	user, err = service.SysUser().GetUserByUniqueKey(ctx, req.Mobile)
 	errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
 	if user != nil {
-		err = gerror.New("用户已存在")
+		err = gerror.New("手机号已存在")
+		return
+	}
+	user, err = service.SysUser().GetUserByUniqueKey(ctx, req.Username)
+	errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
+	if user != nil {
+		err = gerror.New("账号已存在")
+		return
+	}
+
+	// 判断验证码是否正确
+	err = checkVerifyCode(ctx, req.Mobile, req.VerifyCode)
+	if err != nil {
 		return
 	}
 	// 注册用户

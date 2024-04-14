@@ -9,7 +9,7 @@ import (
 
 func (c *ControllerV1) EmailLogin(ctx context.Context, req *v1.EmailLoginReq) (res *v1.EmailLoginRes, err error) {
 	var resBase *v1.LoginResCommon
-	err, resBase = LoginCommon(ctx, req.Email, req.VerifyCode, "email")
+	err, resBase = LoginCommon(ctx, req.Email, "", req.VerifyCode, "email")
 	if err != nil {
 		return
 	}

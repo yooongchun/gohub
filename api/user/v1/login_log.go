@@ -8,7 +8,7 @@ import (
 
 // GetLoginLogListReq 查询列表请求参数
 type GetLoginLogListReq struct {
-	g.Meta        `path:"/login-logs" tags:"登录日志管理" method:"get" summary:"日志列表"`
+	g.Meta        `path:"/login-logs" tags:"日志管理" method:"get" summary:"登陆日志列表"`
 	LoginName     string `p:"userName"`      //登陆名
 	Status        string `p:"status"`        //状态
 	Ipaddr        string `p:"ipaddr"`        //登录地址
@@ -25,7 +25,7 @@ type GetLoginLogListRes struct {
 }
 
 type DeleteLoginLogListReq struct {
-	g.Meta `path:"/login-logs" tags:"登录日志管理" method:"delete" summary:"删除日志"`
+	g.Meta `path:"/login-logs" tags:"日志管理" method:"delete" summary:"删除登陆日志"`
 	Ids    []int `p:"ids" v:"required#ids必须"`
 }
 
@@ -34,7 +34,7 @@ type DeleteLoginLogListRes struct {
 }
 
 type ClearLoginLogReq struct {
-	g.Meta `path:"/login-logs/clear" tags:"登录日志管理" method:"delete" summary:"清除日志"`
+	g.Meta `path:"/login-logs/clear" tags:"日志管理" method:"delete" summary:"清除登陆日志"`
 }
 
 type ClearLoginLogRes struct {

@@ -7,7 +7,7 @@ package service
 
 import (
 	"context"
-	v1 "gohub/api/admin/v1"
+	v1 "gohub/api/user/v1"
 )
 
 type (

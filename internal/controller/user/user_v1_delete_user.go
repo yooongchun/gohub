@@ -1,11 +1,11 @@
-package admin
+package user
 
 import (
 	"context"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"gohub/internal/service"
 
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 )
 
 func (c *ControllerV1) DeleteUser(ctx context.Context, req *v1.DeleteUserReq) (res *v1.DeleteUserRes, err error) {

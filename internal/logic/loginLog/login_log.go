@@ -7,7 +7,7 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/mssola/user_agent"
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 	"gohub/internal/consts"
 	"gohub/internal/dao"
 	"gohub/internal/model/do"

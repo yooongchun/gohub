@@ -7,7 +7,7 @@ package service
 
 import (
 	"context"
-	v1 "gohub/api/admin/v1"
+	v1 "gohub/api/user/v1"
 	"gohub/internal/model/entity"
 
 	"github.com/gogf/gf/v2/frame/g"

@@ -14,7 +14,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
-	v1 "gohub/api/user/v1"
+	"gohub/api/common/v1"
 	"gohub/internal/consts"
 	"gohub/internal/model/entity"
 	"gohub/internal/service"

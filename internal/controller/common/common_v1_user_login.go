@@ -1,10 +1,10 @@
-package user
+package common
 
 import (
 	"context"
 	"github.com/gogf/gf/v2/util/gconv"
 
-	"gohub/api/user/v1"
+	"gohub/api/common/v1"
 )
 
 func (c *ControllerV1) UserLogin(ctx context.Context, req *v1.UserLoginReq) (res *v1.UserLoginRes, err error) {

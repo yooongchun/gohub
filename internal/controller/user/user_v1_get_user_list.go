@@ -1,11 +1,11 @@
-package admin
+package user
 
 import (
 	"context"
 	"gohub/internal/service"
 	"gohub/utility/errUtils"
 
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 )
 
 func (c *ControllerV1) GetUserList(ctx context.Context, req *v1.GetUserListReq) (res *v1.GetUserListRes, err error) {

@@ -1,10 +1,10 @@
-package admin
+package user
 
 import (
 	"context"
 	"gohub/internal/service"
 
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 )
 
 func (c *ControllerV1) DeleteOperateLogList(ctx context.Context, req *v1.DeleteOperateLogListReq) (res *v1.DeleteOperateLogListRes, err error) {

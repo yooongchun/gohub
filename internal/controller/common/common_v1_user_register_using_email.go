@@ -1,9 +1,8 @@
-package user
+package common
 
 import (
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/grand"
 	"gohub/internal/consts"
@@ -14,7 +13,9 @@ import (
 	"gohub/utility/errUtils"
 	"gohub/utility/utils"
 
-	"gohub/api/user/v1"
+	"github.com/gogf/gf/v2/errors/gerror"
+
+	"gohub/api/common/v1"
 )
 
 func (c *ControllerV1) UserRegisterUsingEmail(ctx context.Context, req *v1.UserRegisterUsingEmailReq) (res *v1.UserRegisterUsingEmailRes, err error) {

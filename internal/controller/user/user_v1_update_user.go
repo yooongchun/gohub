@@ -1,11 +1,11 @@
-package admin
+package user
 
 import (
 	"context"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"gohub/internal/service"
 
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 )
 
 func (c *ControllerV1) UpdateUser(ctx context.Context, req *v1.UpdateUserReq) (res *v1.UpdateUserRes, err error) {

@@ -9,7 +9,7 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gogf/gf/v2/util/grand"
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 	"gohub/internal/consts"
 	"gohub/internal/dao"
 	"gohub/internal/model/do"
@@ -34,7 +34,7 @@ func New() *sSysUser {
 func (s *sSysUser) GetUserById(ctx context.Context, id uint64) (user *entity.SysUser, err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		err = dao.SysUser.Ctx(ctx).FieldsEx(dao.SysUser.Columns().UserPassword, dao.SysUser.Columns().UserSalt).
-			WherePri(id).Scan(user)
+			WherePri(id).Scan(&user)
 		errUtils.ErrIfNotNil(ctx, err, "获取用户信息失败")
 	})
 	return
@@ -47,7 +47,7 @@ func (s *sSysUser) GetUserByUniqueKey(ctx context.Context, key string) (user *en
 			FieldsEx(dao.SysUser.Columns().UserPassword, dao.SysUser.Columns().UserSalt).
 			Where(dao.SysUser.Columns().UserName, key).
 			WhereOr(dao.SysUser.Columns().Mobile, key).
-			WhereOr(dao.SysUser.Columns().UserEmail).Scan(user)
+			WhereOr(dao.SysUser.Columns().UserEmail).Scan(&user)
 		errUtils.ErrIfNotNil(ctx, err)
 		//账号状态
 		if user != nil && user.UserStatus == 0 {

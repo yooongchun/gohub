@@ -8,7 +8,7 @@ import (
 
 // GetOperateLogListReq 分页请求参数
 type GetOperateLogListReq struct {
-	g.Meta        `path:"/operate-logs" tags:"操作日志" method:"get" summary:"操作日志列表"`
+	g.Meta        `path:"/operate-logs" tags:"日志管理" method:"get" summary:"操作日志列表"`
 	Title         string `p:"title"`         //系统模块
 	RequestMethod string `p:"requestMethod"` //请求方式
 	OperateName   string `p:"operateName"`   //操作人员
@@ -25,7 +25,7 @@ type GetOperateLogListRes struct {
 
 // GetOperateLogOneReq 获取一条数据请求
 type GetOperateLogOneReq struct {
-	g.Meta `path:"/operate-log/:operateId" tags:"操作日志" method:"get" summary:"获取操作日志信息"`
+	g.Meta `path:"/operate-log/:operateId" tags:"日志管理" method:"get" summary:"获取操作日志信息"`
 	v1.Author
 }
 
@@ -37,7 +37,7 @@ type GetOperateLogOneRes struct {
 
 // DeleteOperateLogListReq 删除数据请求
 type DeleteOperateLogListReq struct {
-	g.Meta `path:"/operate-logs" tags:"操作日志" method:"delete" summary:"删除操作日志"`
+	g.Meta `path:"/operate-logs" tags:"日志管理" method:"delete" summary:"删除操作日志"`
 	v1.Author
 	OperateIds []uint64 `p:"operateIds" v:"required#主键必须"` //通过主键删除
 }
@@ -49,7 +49,7 @@ type DeleteOperateLogListRes struct {
 
 // ClearOperateLogReq 清除操作日志请求
 type ClearOperateLogReq struct {
-	g.Meta `path:"/operate-logs/clear" tags:"操作日志" method:"delete" summary:"清除日志"`
+	g.Meta `path:"/operate-logs/clear" tags:"日志管理" method:"delete" summary:"清除日志"`
 	v1.Author
 }
 

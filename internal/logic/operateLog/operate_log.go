@@ -7,7 +7,7 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/grpool"
 	"github.com/gogf/gf/v2/os/gtime"
-	"gohub/api/admin/v1"
+	"gohub/api/user/v1"
 	"gohub/internal/consts"
 	"gohub/internal/dao"
 	"gohub/internal/model/do"

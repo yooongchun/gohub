@@ -3,7 +3,6 @@ package router
 import (
 	"context"
 	"github.com/gogf/gf/v2/net/ghttp"
-	"gohub/internal/router/admin"
 	"gohub/internal/router/common"
 	"gohub/internal/router/user"
 	"gohub/internal/service"
@@ -22,8 +21,6 @@ func (r *Router) BindController(ctx context.Context, group *ghttp.RouterGroup) {
 		group.Middleware(service.Middleware().ErrorHandler)
 		//绑定公共路由
 		common.R.BindController(ctx, group)
-		//绑定后台理由
-		admin.R.BindController(ctx, group)
 		//绑定用户路由
 		user.R.BindController(ctx, group)
 		// 后台操作日志记录

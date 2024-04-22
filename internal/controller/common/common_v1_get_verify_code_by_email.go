@@ -3,6 +3,7 @@ package common
 import (
 	"bytes"
 	"context"
+	"github.com/gogf/gf/v2/util/gmode"
 	"gohub/api/common/v1"
 	"gohub/internal/consts"
 	"gohub/internal/service"
@@ -13,7 +14,9 @@ import (
 
 func (c *ControllerV1) GetVerifyCodeByEmail(ctx context.Context, req *v1.GetVerifyCodeByEmailReq) (res *v1.GetVerifyCodeByEmailRes, err error) {
 	//判断验证码是否正确
-	verifyCaptcha(req.VerifyKey, req.VerifyCode)
+	if gmode.IsProduct() {
+		verifyCaptcha(req.VerifyKey, req.VerifyCode)
+	}
 	//生成验证码
 	verifyCode := genVerifyCode()
 	// 渲染邮件模板

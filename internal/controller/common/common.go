@@ -81,16 +81,17 @@ func LoginCommon(ctx context.Context, key, verifyKey, verifyCode, loginType stri
 		token string
 	)
 	//判断验证码是否正确
-	if gmode.IsDevelop() {
-		// 开发环境不需要验证码
-	} else if loginType == "user" {
-		// 账号密码登陆使用图形验证码
-		verifyCaptcha(verifyKey, verifyCode)
-	} else {
-		// 否则使用邮箱/手机验证码
-		err = checkVerifyCode(ctx, key, verifyCode)
-		if err != nil {
-			return
+	// 开发环境不需要验证码
+	if gmode.IsProduct() {
+		if loginType == "user" {
+			// 账号密码登陆使用图形验证码
+			verifyCaptcha(verifyKey, verifyCode)
+		} else {
+			// 否则使用邮箱/手机验证码
+			err = checkVerifyCode(ctx, key, verifyCode)
+			if err != nil {
+				return
+			}
 		}
 	}
 	ip := utils.GetClientIp(ctx)

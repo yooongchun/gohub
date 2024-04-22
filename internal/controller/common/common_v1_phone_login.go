@@ -13,6 +13,6 @@ func (c *ControllerV1) PhoneLogin(ctx context.Context, req *v1.PhoneLoginReq) (r
 	if err != nil {
 		return
 	}
-	err = gconv.Struct(resBase, res)
+	err = gconv.Struct(resBase, &res)
 	return
 }

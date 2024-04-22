@@ -6,7 +6,7 @@ import (
 )
 
 type UserLoginReq struct {
-	g.Meta     `path:"/login/username" tags:"用户登陆" method:"post" summary:"账号密码登陆"`
+	g.Meta     `path:"/login/username" tags:"用户登录" method:"post" summary:"账号密码登录"`
 	Username   string `p:"username" v:"required#用户名不能为空"`
 	Password   string `p:"password" v:"required#密码不能为空"`
 	VerifyCode string `p:"verifyCode" v:"required#验证码不能为空"`
@@ -23,7 +23,7 @@ type UserLoginRes struct {
 }
 
 type PhoneLoginReq struct {
-	g.Meta     `path:"/login/phone" tags:"用户登陆" method:"post" summary:"手机号登陆"`
+	g.Meta     `path:"/login/phone" tags:"用户登录" method:"post" summary:"手机号登录"`
 	Mobile     string `p:"phone" v:"required|phone#手机号不能为空|手机号不正确"`
 	VerifyCode string `p:"verifyCode" v:"required|size:6#验证码不能为空|验证码长度为6位"`
 }
@@ -33,7 +33,7 @@ type PhoneLoginRes struct {
 }
 
 type EmailLoginReq struct {
-	g.Meta     `path:"/login/email" tags:"用户登陆" method:"post" summary:"邮箱登陆"`
+	g.Meta     `path:"/login/email" tags:"用户登录" method:"post" summary:"邮箱登录"`
 	Email      string `p:"email" v:"required|email#邮箱不能为空|邮箱号无效"`
 	VerifyCode string `p:"verifyCode" v:"required|size:6#验证码不能为空|验证码长度为6位"`
 }

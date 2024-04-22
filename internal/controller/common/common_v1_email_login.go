@@ -13,6 +13,6 @@ func (c *ControllerV1) EmailLogin(ctx context.Context, req *v1.EmailLoginReq) (r
 	if err != nil {
 		return
 	}
-	err = gconv.Struct(resBase, res)
+	err = gconv.Struct(resBase, &res)
 	return
 }

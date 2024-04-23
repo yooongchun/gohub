@@ -60,3 +60,14 @@ type DeleteUserReq struct {
 type DeleteUserRes struct {
 	v1.EmptyRes
 }
+
+// GetUserInfoReq 获取用户信息请求参数
+type GetUserInfoReq struct {
+	g.Meta `path:"/user" tags:"用户管理" method:"get" summary:"个人信息"`
+}
+
+// GetUserInfoRes 获取用户信息响应参数
+type GetUserInfoRes struct {
+	g.Meta `mime:"application/json"`
+	User   *entity.SysUser `json:"user"`
+}

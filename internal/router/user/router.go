@@ -19,6 +19,9 @@ func (r *Router) BindController(ctx context.Context, group *ghttp.RouterGroup) {
 		// 登录验证拦截
 		err := service.GhToken().Middleware(group)
 		errUtils.ErrIfNotNil(ctx, err, consts.InternalServerError)
+		// Context 拦截，注入登录用户信息
+		group.Middleware(service.Middleware().Ctx)
+		group.Bind(v1.GetUserInfo)
 		// 需要管理员
 		group.Group("/admin", func(group *ghttp.RouterGroup) {
 			group.Middleware(service.Middleware().Ctx, service.Middleware().AdminRequired)
